@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+const connectToMongo = require("./DBconnection")
+const express = require("express")
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+let cors = require("cors")
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+connectToMongo()
+const app = express()
+const port = 5000
+
+// middlewares for running the json req,res and cross origin request
+app.use(cors())
+app.use(express.json())
+
+// Available Routes
+app.use("/api/auth", require("./routes/auth"))
+app.use("/api/notes", require("./routes/notes"))
+
+app.listen(port, () => {
+    console.log(`NoteKeeper backend listening at http://localhost:${port}`)
+})
